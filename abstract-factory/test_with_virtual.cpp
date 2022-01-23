@@ -47,3 +47,29 @@ TEST(ProductTest, ConstructProductB_Y) {
   const ProductB_Y product{"bar"};
   EXPECT_STREQ(product.get_value().c_str(), "ProductB_Y: bar");
 }
+
+TEST(FactoryTest, XFactoryIsAFactory) {
+  static_assert(std::is_base_of_v<AbstractFactoryBase, XFactory>,
+                "The implemented class is required to be of this shape by the "
+                "design pattern");
+}
+
+TEST(FactoryTest, XFactory) {
+  const XFactory factory{};
+  EXPECT_STREQ(factory.create_ProductA()->get_name().c_str(), "ProductA: X");
+  EXPECT_STREQ(factory.create_ProductB("foo")->get_value().c_str(),
+               "ProductB_X: foo");
+}
+
+TEST(FactoryTest, YFactoryIsAFactory) {
+  static_assert(std::is_base_of_v<AbstractFactoryBase, YFactory>,
+                "The implemented class is required to be of this shape by the "
+                "design pattern");
+}
+
+TEST(FactoryTest, YFactory) {
+  const YFactory factory{};
+  EXPECT_STREQ(factory.create_ProductA()->get_name().c_str(), "ProductA: Y");
+  EXPECT_STREQ(factory.create_ProductB("foo")->get_value().c_str(),
+               "ProductB_Y: foo");
+}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 class ProductABase {
@@ -88,4 +89,50 @@ public:
 
 private:
   std::string value_y{};
+};
+
+class AbstractFactoryBase {
+public:
+  [[nodiscard]] virtual auto create_ProductA() const
+      -> std::unique_ptr<ProductABase> = 0;
+  [[nodiscard]] virtual auto create_ProductB(std::string) const
+      -> std::unique_ptr<ProductBBase> = 0;
+};
+
+class XFactory : public AbstractFactoryBase {
+public:
+  XFactory() = default;
+  virtual ~XFactory() = default;
+  XFactory(const XFactory &) = default;
+  XFactory(XFactory &&) = default;
+  XFactory &operator=(const XFactory &) = default;
+  XFactory &operator=(XFactory &&) = default;
+
+  [[nodiscard]] auto create_ProductA() const
+      -> std::unique_ptr<ProductABase> override {
+    return std::make_unique<ProductA_X>();
+  }
+  [[nodiscard]] auto create_ProductB(std::string input_value) const
+      -> std::unique_ptr<ProductBBase> override {
+    return std::make_unique<ProductB_X>(std::move(input_value));
+  }
+};
+
+class YFactory : public AbstractFactoryBase {
+public:
+  YFactory() = default;
+  virtual ~YFactory() = default;
+  YFactory(const YFactory &) = default;
+  YFactory(YFactory &&) = default;
+  YFactory &operator=(const YFactory &) = default;
+  YFactory &operator=(YFactory &&) = default;
+
+  [[nodiscard]] auto create_ProductA() const
+      -> std::unique_ptr<ProductABase> override {
+    return std::make_unique<ProductA_Y>();
+  }
+  [[nodiscard]] auto create_ProductB(std::string input_value) const
+      -> std::unique_ptr<ProductBBase> override {
+    return std::make_unique<ProductB_Y>(std::move(input_value));
+  }
 };

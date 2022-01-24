@@ -1,16 +1,14 @@
 #pragma once
 
+#include "utilities/rule_of_five.hpp"
+
 #include <memory>
 #include <string>
 
 class ProductABase {
 public:
   ProductABase() = default;
-  virtual ~ProductABase() = default;
-  ProductABase(const ProductABase &) = default;
-  ProductABase(ProductABase &&) = default;
-  ProductABase &operator=(const ProductABase &) = default;
-  ProductABase &operator=(ProductABase &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_BASE(ProductABase);
 
   [[nodiscard]] virtual auto get_name() const -> std::string = 0;
 };
@@ -18,11 +16,7 @@ public:
 class ProductA_X : public ProductABase {
 public:
   ProductA_X() = default;
-  virtual ~ProductA_X() = default;
-  ProductA_X(const ProductA_X &) = default;
-  ProductA_X(ProductA_X &&) = default;
-  ProductA_X &operator=(const ProductA_X &) = default;
-  ProductA_X &operator=(ProductA_X &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_OVERRIDE(ProductA_X);
 
   [[nodiscard]] auto get_name() const -> std::string override {
     return "ProductA: X";
@@ -32,11 +26,7 @@ public:
 class ProductA_Y : public ProductABase {
 public:
   ProductA_Y() = default;
-  virtual ~ProductA_Y() = default;
-  ProductA_Y(const ProductA_Y &) = default;
-  ProductA_Y(ProductA_Y &&) = default;
-  ProductA_Y &operator=(const ProductA_Y &) = default;
-  ProductA_Y &operator=(ProductA_Y &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_OVERRIDE(ProductA_Y);
 
   [[nodiscard]] auto get_name() const -> std::string override {
     return "ProductA: Y";
@@ -46,11 +36,7 @@ public:
 class ProductBBase {
 public:
   ProductBBase() = default;
-  virtual ~ProductBBase() = default;
-  ProductBBase(const ProductBBase &) = default;
-  ProductBBase(ProductBBase &&) = default;
-  ProductBBase &operator=(const ProductBBase &) = default;
-  ProductBBase &operator=(ProductBBase &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_BASE(ProductBBase);
 
   [[nodiscard]] virtual auto get_value() const -> std::string = 0;
 };
@@ -59,11 +45,7 @@ class ProductB_X : public ProductBBase {
 public:
   explicit(true) ProductB_X(std::string input_value)
       : value_x{std::move(input_value)} {}
-  virtual ~ProductB_X() = default;
-  ProductB_X(const ProductB_X &) = default;
-  ProductB_X(ProductB_X &&) = default;
-  ProductB_X &operator=(const ProductB_X &) = default;
-  ProductB_X &operator=(ProductB_X &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_OVERRIDE(ProductB_X);
 
   [[nodiscard]] auto get_value() const -> std::string override {
     return "ProductB_X: " + value_x;
@@ -77,11 +59,7 @@ class ProductB_Y : public ProductBBase {
 public:
   explicit(true) ProductB_Y(std::string input_value)
       : value_y{std::move(input_value)} {}
-  virtual ~ProductB_Y() = default;
-  ProductB_Y(const ProductB_Y &) = default;
-  ProductB_Y(ProductB_Y &&) = default;
-  ProductB_Y &operator=(const ProductB_Y &) = default;
-  ProductB_Y &operator=(ProductB_Y &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_OVERRIDE(ProductB_Y);
 
   [[nodiscard]] auto get_value() const -> std::string override {
     return "ProductB_Y: " + value_y;
@@ -93,6 +71,9 @@ private:
 
 class AbstractFactoryBase {
 public:
+  AbstractFactoryBase() = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_BASE(AbstractFactoryBase);
+
   [[nodiscard]] virtual auto create_ProductA() const
       -> std::unique_ptr<ProductABase> = 0;
   [[nodiscard]] virtual auto create_ProductB(std::string) const
@@ -102,11 +83,7 @@ public:
 class XFactory : public AbstractFactoryBase {
 public:
   XFactory() = default;
-  virtual ~XFactory() = default;
-  XFactory(const XFactory &) = default;
-  XFactory(XFactory &&) = default;
-  XFactory &operator=(const XFactory &) = default;
-  XFactory &operator=(XFactory &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_OVERRIDE(XFactory);
 
   [[nodiscard]] auto create_ProductA() const
       -> std::unique_ptr<ProductABase> override {
@@ -121,11 +98,7 @@ public:
 class YFactory : public AbstractFactoryBase {
 public:
   YFactory() = default;
-  virtual ~YFactory() = default;
-  YFactory(const YFactory &) = default;
-  YFactory(YFactory &&) = default;
-  YFactory &operator=(const YFactory &) = default;
-  YFactory &operator=(YFactory &&) = default;
+  RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_OVERRIDE(YFactory);
 
   [[nodiscard]] auto create_ProductA() const
       -> std::unique_ptr<ProductABase> override {

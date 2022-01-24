@@ -6,5 +6,8 @@ cc_test(
         "with_virtual.hpp",
     ],
     copts = ["-std=c++20"],
-    deps = ["@com_google_googletest//:gtest_main"],
+    deps = [
+        "//utilities",
+        "@com_google_googletest//:gtest_main",
+    ],
 )

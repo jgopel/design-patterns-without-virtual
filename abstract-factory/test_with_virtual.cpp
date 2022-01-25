@@ -73,3 +73,25 @@ TEST(FactoryTest, YFactory) {
   EXPECT_STREQ(factory.create_ProductB("foo")->get_value().c_str(),
                "ProductB_Y: foo");
 }
+
+TEST(FactoryTest, DefineCustomFactories) {
+  class CustomFactory : public AbstractFactoryBase {
+  public:
+    CustomFactory() = default;
+    RULE_OF_FIVE_VIRTUAL_DESTRUCTOR_FOR_OVERRIDE(CustomFactory);
+
+    [[nodiscard]] auto create_ProductA() const
+        -> std::unique_ptr<ProductABase> override {
+      return std::make_unique<ProductA_X>();
+    }
+
+    [[nodiscard]] auto create_ProductB(std::string) const
+        -> std::unique_ptr<ProductBBase> override {
+      return std::make_unique<ProductB_Y>("foo");
+    }
+  };
+  const CustomFactory factory{};
+  EXPECT_STREQ(factory.create_ProductA()->get_name().c_str(), "ProductA: X");
+  EXPECT_STREQ(factory.create_ProductB("foo")->get_value().c_str(),
+               "ProductB_Y: foo");
+}

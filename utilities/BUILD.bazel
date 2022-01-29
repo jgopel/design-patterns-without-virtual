@@ -1,0 +1,5 @@
+cc_library(
+    name = "utilities",
+    hdrs = ["rule_of_five.hpp"],
+    visibility = ["//visibility:public"],
+)

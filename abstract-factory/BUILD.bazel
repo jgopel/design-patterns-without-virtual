@@ -1,0 +1,24 @@
+cc_test(
+    name = "with_virtual",
+    size = "small",
+    srcs = [
+        "test_with_virtual.cpp",
+        "with_virtual.hpp",
+    ],
+    copts = ["-std=c++20"],
+    deps = [
+        "//utilities",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "without_virtual",
+    size = "small",
+    srcs = [
+        "test_without_virtual.cpp",
+        "without_virtual.hpp",
+    ],
+    copts = ["-std=c++20"],
+    deps = ["@com_google_googletest//:gtest_main"],
+)

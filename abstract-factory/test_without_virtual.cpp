@@ -55,3 +55,11 @@ TEST(FactoryTest, YFactory) {
   EXPECT_STREQ(factory.create_ProductB("foo").get_value().c_str(),
                "ProductB_Y: foo");
 }
+
+TEST(FactoryTest, DefineCustomFactories) {
+  using factory_t = Factory<ProductA_X, ProductB_Y>;
+  const factory_t factory{};
+  EXPECT_STREQ(factory.create_ProductA().get_name().c_str(), "ProductA: X");
+  EXPECT_STREQ(factory.create_ProductB("foo").get_value().c_str(),
+               "ProductB_Y: foo");
+}

@@ -1,0 +1,12 @@
+load("//utilities:variables.bzl", "COPTS")
+
+cc_test(
+    name = "with_virtual",
+    size = "small",
+    srcs = [
+        "test_with_virtual.cpp",
+        "with_virtual.hpp",
+    ],
+    copts = COPTS,
+    deps = ["@com_google_googletest//:gtest_main"],
+)

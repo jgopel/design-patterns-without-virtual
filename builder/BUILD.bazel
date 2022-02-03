@@ -8,5 +8,8 @@ cc_test(
         "with_virtual.hpp",
     ],
     copts = COPTS,
-    deps = ["@com_google_googletest//:gtest_main"],
+    deps = [
+        "//utilities",
+        "@com_google_googletest//:gtest_main",
+    ],
 )

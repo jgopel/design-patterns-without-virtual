@@ -2,6 +2,7 @@
 
 #include "utilities/rule_of_five.hpp"
 
+#include <memory>
 #include <optional>
 #include <string>
 
@@ -60,4 +61,23 @@ public:
 
 private:
   Product product{};
+};
+
+class Director {
+public:
+  Director(std::unique_ptr<BuilderBase> concrete_builder) {
+    set_builder(std::move(concrete_builder));
+  }
+
+  auto set_builder(std::unique_ptr<BuilderBase> concrete_builder) -> void {
+    builder = std::move(concrete_builder);
+    builder->set_color();
+    builder->set_size();
+    builder->set_model();
+  }
+
+  [[nodiscard]] auto build() const -> Product { return builder->build(); }
+
+private:
+  std::unique_ptr<BuilderBase> builder{};
 };

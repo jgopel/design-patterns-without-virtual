@@ -2,6 +2,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 TEST(ProductTest, ConstructProductWithAllArgs) {
   const Product product{Color::Red, 42, "Excalibur"};
   EXPECT_EQ(product.color, Color::Red);
@@ -94,4 +96,45 @@ TEST(BuilderTest, DependentBuilderHasModelWithSize) {
 TEST(BuilderTest, DependentBuilderHasNoModelWithoutSize) {
   DependentBuilder builder{};
   EXPECT_THROW((void)builder.set_model(), std::bad_optional_access);
+}
+
+TEST(DirectorTest, BuildWithIndependentBuilder) {
+  const Director director{std::make_unique<IndependentBuilder>()};
+  const auto product = director.build();
+  EXPECT_EQ(product.color.value(), Color::Green);
+  EXPECT_EQ(product.size.value(), 42);
+  EXPECT_STREQ(product.model.value().c_str(), "Independent");
+}
+
+TEST(DirectorTest, BuildWithDependentBuilder) {
+  const Director director{std::make_unique<DependentBuilder>()};
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+}
+
+TEST(DirectorTest, ChangeBuilderAfterBuilding) {
+  Director director{std::make_unique<DependentBuilder>()};
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+  director.set_builder(std::make_unique<IndependentBuilder>());
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Green);
+    EXPECT_EQ(product.size.value(), 42);
+    EXPECT_STREQ(product.model.value().c_str(), "Independent");
+  }
 }

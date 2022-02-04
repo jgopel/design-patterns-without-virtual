@@ -25,3 +25,15 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "without_virtual",
+    size = "small",
+    srcs = [
+        "common.hpp",
+        "test_without_virtual.cpp",
+        "without_virtual.hpp",
+    ],
+    copts = COPTS,
+    deps = ["@com_google_googletest//:gtest_main"],
+)

@@ -1,23 +1,10 @@
 #pragma once
 
+#include "common.hpp"
+
 #include "utilities/rule_of_five.hpp"
 
 #include <memory>
-#include <optional>
-#include <string>
-
-enum class Color {
-  Red,
-  Blue,
-  Green,
-};
-
-class Product {
-public:
-  std::optional<Color> color{};
-  std::optional<int> size{};
-  std::optional<std::string> model{};
-};
 
 class BuilderBase {
 public:

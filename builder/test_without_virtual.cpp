@@ -81,3 +81,69 @@ TEST(BuilderTest, DependentBuilderHasNoModelWithoutSize) {
   DependentBuilder builder{};
   EXPECT_THROW((void)builder.set_model(), std::bad_optional_access);
 }
+
+TEST(FixedDirectorTest, BuildWithIndependentBuilder) {
+  const FixedDirector director{IndependentBuilder{}};
+  const auto product = director.build();
+  EXPECT_EQ(product.color.value(), Color::Green);
+  EXPECT_EQ(product.size.value(), 42);
+  EXPECT_STREQ(product.model.value().c_str(), "Independent");
+}
+
+TEST(FixedDirectorTest, BuildWithDependentBuilder) {
+  const FixedDirector director{DependentBuilder{}};
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+}
+
+TEST(SwitchableDirectorTest, BuildWithIndependentBuilder) {
+  const SwitchableDirector<IndependentBuilder> director{IndependentBuilder{}};
+  const auto product = director.build();
+  EXPECT_EQ(product.color.value(), Color::Green);
+  EXPECT_EQ(product.size.value(), 42);
+  EXPECT_STREQ(product.model.value().c_str(), "Independent");
+}
+
+TEST(SwitchableDirectorTest, BuildWithDependentBuilder) {
+  const SwitchableDirector<DependentBuilder> director{DependentBuilder{}};
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+}
+
+TEST(SwitchableDirectorTest, ChangeBuilderAfterBuilding) {
+  SwitchableDirector<DependentBuilder, IndependentBuilder> director{
+      DependentBuilder{}};
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Blue);
+    EXPECT_EQ(product.size.value(), 101);
+    EXPECT_STREQ(product.model.value().c_str(), "Dependent - size 101");
+  }
+  director.set_builder(IndependentBuilder{});
+  {
+    const auto product = director.build();
+    EXPECT_EQ(product.color.value(), Color::Green);
+    EXPECT_EQ(product.size.value(), 42);
+    EXPECT_STREQ(product.model.value().c_str(), "Independent");
+  }
+}

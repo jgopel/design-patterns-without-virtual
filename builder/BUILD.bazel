@@ -1,9 +1,21 @@
 load("//utilities:variables.bzl", "COPTS")
 
 cc_test(
+    name = "common",
+    size = "small",
+    srcs = [
+        "common.hpp",
+        "test_common.cpp",
+    ],
+    copts = COPTS,
+    deps = ["@com_google_googletest//:gtest_main"],
+)
+
+cc_test(
     name = "with_virtual",
     size = "small",
     srcs = [
+        "common.hpp",
         "test_with_virtual.cpp",
         "with_virtual.hpp",
     ],
@@ -18,6 +30,7 @@ cc_test(
     name = "without_virtual",
     size = "small",
     srcs = [
+        "common.hpp",
         "test_without_virtual.cpp",
         "without_virtual.hpp",
     ],

@@ -48,7 +48,7 @@ private:
   std::string value_y{};
 };
 
-template <typename TProductA, typename TProductB> class Factory {
+template <CProductA TProductA, CProductB TProductB> class Factory {
 public:
   [[nodiscard]] auto create_ProductA() const -> TProductA {
     return TProductA{};

@@ -59,3 +59,13 @@ http_archive(
     strip_prefix = "googletest-609281088cfefc76f9d0ce82e1ff6c30cc3591e5",
     urls = ["https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip"],
 )
+
+http_archive(
+    name = "hedron_compile_commands",
+    strip_prefix = "bazel-compile-commands-extractor-1d21dc390e20ecb24d73e9dbb439e971e0d30337",
+    url = "https://github.com/hedronvision/bazel-compile-commands-extractor/archive/1d21dc390e20ecb24d73e9dbb439e971e0d30337.tar.gz",
+)
+
+load("@hedron_compile_commands//:workspace_setup.bzl", "hedron_compile_commands_setup")
+
+hedron_compile_commands_setup()
